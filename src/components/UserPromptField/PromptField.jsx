@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
@@ -9,10 +9,8 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   display: 'flex', 
   position: 'fixed',
   bottom: 10,
-  left: '50%',
-  transform: 'translateX(-50%)',
-  width: 'calc(100% - 40px)', // Subtracting 40px to account for 20px padding on each side
-  maxWidth: '800px',
+  left: 20,
+  width: '98%',
   alignItems: 'center',
   backgroundColor: 'rgba(64, 65, 79, 0.9)',
   borderRadius: 24,
@@ -33,20 +31,22 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.common.white,
 }));
 
-export default function PromptField() {
+export default function PromptField({onSendMessage}) {
   const [inputValue, setInputValue] = useState('');
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
 
-  const handleSubmit = () => {
+  const handleSend = () => {
     if (inputValue.trim()) {
-      console.log('Submitted:', inputValue);
-      // Here you would typically send the input value to your chat handler
-      setInputValue(''); // Clear the input after submitting
+      onSendMessage(inputValue);
+      setInputValue('');
     }
   };
+
+  // Check if the input is empty or only contains whitespace
+  const isInputEmpty = !inputValue.trim();
 
   return (
     <StyledPaper elevation={3}>
@@ -57,13 +57,17 @@ export default function PromptField() {
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' && !e.shiftKey) {
+          if (e.key === 'Enter' && !e.shiftKey && !isInputEmpty) {
             e.preventDefault();
-            handleSubmit();
+            handleSend();
           }
         }}
       />
-      <StyledIconButton aria-label="send" onClick={handleSubmit}>
+      <StyledIconButton 
+        aria-label="send" 
+        onClick={handleSend}
+        disabled={isInputEmpty}
+      >
         <SendIcon />
       </StyledIconButton>
     </StyledPaper>
