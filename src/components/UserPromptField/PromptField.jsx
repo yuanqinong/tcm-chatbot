@@ -6,15 +6,18 @@ import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  width: '100%',
+  display: 'flex', 
+  position: 'fixed',
+  bottom: 10,
+  left: '50%',
+  transform: 'translateX(-50%)',
+  width: 'calc(100% - 40px)', // Subtracting 40px to account for 20px padding on each side
   maxWidth: '800px',
-  display: 'flex',
   alignItems: 'center',
   backgroundColor: 'rgba(64, 65, 79, 0.9)',
   borderRadius: 24,
   padding: theme.spacing(0.5, 2),
-  margin: '0 auto',
-  marginTop: theme.spacing(2),
+  zIndex: theme.zIndex.drawer + 1, // Ensure it's above other elements
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -48,7 +51,7 @@ export default function PromptField() {
   return (
     <StyledPaper elevation={3}>
       <StyledInputBase
-        placeholder="Message ChatGPT"
+        placeholder="Message ChatTCM"
         multiline
         maxRows={4}
         value={inputValue}
