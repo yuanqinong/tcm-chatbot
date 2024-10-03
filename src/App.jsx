@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -23,7 +23,7 @@ import PromptField from "./components/UserPromptField/PromptField.jsx";
 import ChatMessage from "./components/ChatMessage/ChatMessage.jsx";
 import "./App.css";
 
-const drawerWidth = 240;
+const drawerwidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme }) => ({
@@ -31,12 +31,13 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
     minHeight: "100vh",
     backgroundColor: "#212121",
     padding: theme.spacing(3),
+    paddingBottom: 100,
     color: "white",
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: `-${drawerWidth}px`,
+    marginLeft: `-${drawerwidth}px`,
     variants: [
       {
         props: ({ open }) => open,
@@ -60,8 +61,8 @@ const AppBar = styled(MuiAppBar, {
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
+    width: `calc(100% - ${drawerwidth}px)`,
+    marginLeft: `${drawerwidth}px`,
     transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -84,6 +85,15 @@ export default function App() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -95,14 +105,14 @@ export default function App() {
 
   const handleSendMessage = async (message) => {
     console.log("handling send message");
-    setMessages((prev) => [...prev, { text: message, isAi: false }]);
+    setMessages((prev) => [...prev, { text: message, isai: false }]);
     setIsLoading(true);
 
     // Simulate AI response (replace with actual API call)
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
-        { text: "This is a simulated AI response.", isAi: true },
+        { text: "This is a simulated AI response.", isai: true },
       ]);
       setIsLoading(false);
     }, 1000);
@@ -143,10 +153,10 @@ export default function App() {
       </AppBar>
       <Drawer
         sx={{
-          width: drawerWidth,
+          width: drawerwidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: drawerWidth,
+            width: drawerwidth,
             boxSizing: "border-box",
           },
         }}
@@ -206,14 +216,15 @@ export default function App() {
       <Main open={open}>
         <DrawerHeader />
         {messages.map((msg, index) => (
-          <ChatMessage key={index} message={msg.text} isAi={msg.isAi} />
+          <ChatMessage key={index} message={msg.text} isai={msg.isai} />
         ))}
         {isLoading && <Typography>AI is thinking...</Typography>}
+        <div ref={messagesEndRef} />
       </Main>
       <PromptField
         onSendMessage={handleSendMessage}
         open={open}
-        drawerWidth={drawerWidth}
+        drawerwidth={drawerwidth}
       />
     </Box>
   );

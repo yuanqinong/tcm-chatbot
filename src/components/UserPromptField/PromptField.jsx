@@ -5,7 +5,7 @@ import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 
-const StyledPaper = styled(Paper)(({ theme, open, drawerWidth }) => ({
+const StyledPaper = styled(Paper)(({ theme, open, drawerwidth }) => ({
   display: "flex",
   position: "fixed",
   bottom: 10,
@@ -21,8 +21,8 @@ const StyledPaper = styled(Paper)(({ theme, open, drawerWidth }) => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    width: `calc(98% - ${drawerWidth}px - 40px)`, // Subtract drawer width and padding
-    marginLeft: `${drawerWidth}px`,
+    width: `calc(98% - ${drawerwidth}px - 40px)`, // Subtract drawer width and padding
+    marginLeft: `${drawerwidth}px`,
     transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -43,7 +43,7 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.common.white,
 }));
 
-export default function PromptField({ onSendMessage, open, drawerWidth }) {
+export default function PromptField({ onSendMessage, open, drawerwidth }) {
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (event) => {
@@ -62,7 +62,7 @@ export default function PromptField({ onSendMessage, open, drawerWidth }) {
 
   return (
     /*<StyledPaper elevation={3}>*/
-    <StyledPaper elevation={3} open={open} drawerWidth={drawerWidth}>
+    <StyledPaper elevation={3} open={open} drawerwidth={drawerwidth}>
       <StyledInputBase
         placeholder="Message ChatTCM"
         multiline
