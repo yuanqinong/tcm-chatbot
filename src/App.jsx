@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -73,7 +73,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(0, 1),
-  
+
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: "flex-end",
@@ -95,12 +95,15 @@ export default function App() {
 
   const handleSendMessage = async (message) => {
     console.log("handling send message");
-    setMessages(prev => [...prev, { text: message, isAi: false }]);
+    setMessages((prev) => [...prev, { text: message, isAi: false }]);
     setIsLoading(true);
 
     // Simulate AI response (replace with actual API call)
     setTimeout(() => {
-      setMessages(prev => [...prev, { text: "This is a simulated AI response.", isAi: true }]);
+      setMessages((prev) => [
+        ...prev,
+        { text: "This is a simulated AI response.", isAi: true },
+      ]);
       setIsLoading(false);
     }, 1000);
   };
@@ -203,11 +206,15 @@ export default function App() {
       <Main open={open}>
         <DrawerHeader />
         {messages.map((msg, index) => (
-            <ChatMessage key={index} message={msg.text} isAi={msg.isAi} />
-          ))}
-          {isLoading && <Typography>AI is thinking...</Typography>}
-        <PromptField onSendMessage={handleSendMessage} />
+          <ChatMessage key={index} message={msg.text} isAi={msg.isAi} />
+        ))}
+        {isLoading && <Typography>AI is thinking...</Typography>}
       </Main>
+      <PromptField
+        onSendMessage={handleSendMessage}
+        open={open}
+        drawerWidth={drawerWidth}
+      />
     </Box>
   );
 }
