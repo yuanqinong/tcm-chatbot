@@ -21,6 +21,7 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import ViewSidebarRoundedIcon from "@mui/icons-material/ViewSidebarRounded";
 import PromptField from "./components/UserPromptField/PromptField.jsx";
 import ChatMessage from "./components/ChatMessage/ChatMessage.jsx";
+import Skeleton from "@mui/material/Skeleton";
 import "./App.css";
 
 const drawerwidth = 240;
@@ -85,7 +86,7 @@ export default function App() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef(null)
+  const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -115,7 +116,7 @@ export default function App() {
         { text: "This is a simulated AI response.", isai: true },
       ]);
       setIsLoading(false);
-    }, 1000);
+    }, 10000);
   };
 
   useEffect(() => {
@@ -218,13 +219,21 @@ export default function App() {
         {messages.map((msg, index) => (
           <ChatMessage key={index} message={msg.text} isai={msg.isai} />
         ))}
-        {isLoading && <Typography>AI is thinking...</Typography>}
+        {isLoading && (
+          <Skeleton
+            variant="rounded"
+            width={210}
+            height={60}
+            sx={{ marginLeft: 2, bgcolor: "rgba(68, 70, 84, 0.5)", borderRadius: '15px' }}
+          />
+        )}
         <div ref={messagesEndRef} />
       </Main>
       <PromptField
         onSendMessage={handleSendMessage}
         open={open}
         drawerwidth={drawerwidth}
+        isLoading={isLoading}
       />
     </Box>
   );

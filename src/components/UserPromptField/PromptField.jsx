@@ -43,7 +43,7 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.common.white,
 }));
 
-export default function PromptField({ onSendMessage, open, drawerwidth }) {
+export default function PromptField({ onSendMessage, open, drawerwidth, isLoading }) {
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (event) => {
@@ -57,8 +57,8 @@ export default function PromptField({ onSendMessage, open, drawerwidth }) {
     }
   };
 
-  // Check if the input is empty or only contains whitespace
-  const isInputEmpty = !inputValue.trim();
+  // Check if the input is empty or only contains whitespace, or if it's loading
+  const isDisabled = !inputValue.trim() || isLoading;
 
   return (
     /*<StyledPaper elevation={3}>*/
@@ -70,7 +70,7 @@ export default function PromptField({ onSendMessage, open, drawerwidth }) {
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={(e) => {
-          if (e.key === "Enter" && !e.shiftKey && !isInputEmpty) {
+          if (e.key === "Enter" && !e.shiftKey && !isDisabled) {
             e.preventDefault();
             handleSend();
           }
@@ -79,7 +79,7 @@ export default function PromptField({ onSendMessage, open, drawerwidth }) {
       <StyledIconButton
         aria-label="send"
         onClick={handleSend}
-        disabled={isInputEmpty}
+        disabled={isDisabled}
       >
         <SendIcon />
       </StyledIconButton>
