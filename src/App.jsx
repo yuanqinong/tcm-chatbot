@@ -22,6 +22,8 @@ import ViewSidebarRoundedIcon from "@mui/icons-material/ViewSidebarRounded";
 import PromptField from "./components/UserPromptField/PromptField.jsx";
 import ChatMessage from "./components/ChatMessage/ChatMessage.jsx";
 import Skeleton from "@mui/material/Skeleton";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
+import Avatar from "@mui/material/Avatar";
 import "./App.css";
 
 const drawerwidth = 240;
@@ -220,12 +222,21 @@ export default function App() {
           <ChatMessage key={index} message={msg.text} isai={msg.isai} />
         ))}
         {isLoading && (
-          <Skeleton
-            variant="rounded"
-            width={210}
-            height={60}
-            sx={{ marginLeft: 2, bgcolor: "rgba(68, 70, 84, 0.5)", borderRadius: '15px' }}
-          />
+          <Box sx={{ display: 'flex', alignItems: 'flex-start', marginLeft: 2, marginTop: 2 }}>
+            <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
+              <SmartToyIcon />
+            </Avatar>
+            <Skeleton
+              variant="rounded"
+              width={210}
+              height={60}
+              sx={{
+                marginLeft: 2,
+                bgcolor: "rgba(68, 70, 84, 0.5)",
+                borderRadius: "15px",
+              }}
+              />
+          </Box>
         )}
         <div ref={messagesEndRef} />
       </Main>
