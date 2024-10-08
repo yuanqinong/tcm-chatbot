@@ -24,6 +24,8 @@ import ChatMessage from "./components/ChatMessage/ChatMessage.jsx";
 import Skeleton from "@mui/material/Skeleton";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import Avatar from "@mui/material/Avatar";
+import InfoIcon from "@mui/icons-material/Info";
+import { sendMessage } from "./Redux/chatbot.jsx";
 import "./App.css";
 
 const drawerwidth = 240;
@@ -110,15 +112,12 @@ export default function App() {
     console.log("handling send message");
     setMessages((prev) => [...prev, { text: message, isai: false }]);
     setIsLoading(true);
-
+    const response = await sendMessage(message);
     // Simulate AI response (replace with actual API call)
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { text: "This is a simulated AI response.", isai: true },
-      ]);
-      setIsLoading(false);
-    }, 10000);
+    if (response) {
+      setMessages((prev) => [...prev, { text: response.answer, isai: true }]);
+    }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -222,8 +221,15 @@ export default function App() {
           <ChatMessage key={index} message={msg.text} isai={msg.isai} />
         ))}
         {isLoading && (
-          <Box sx={{ display: 'flex', alignItems: 'flex-start', marginLeft: 2, marginTop: 2 }}>
-            <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              marginLeft: 2,
+              marginTop: 2,
+            }}
+          >
+            <Avatar sx={{ bgcolor: "primary.main", mr: 2 }}>
               <SmartToyIcon />
             </Avatar>
             <Skeleton
@@ -235,7 +241,7 @@ export default function App() {
                 bgcolor: "rgba(68, 70, 84, 0.5)",
                 borderRadius: "15px",
               }}
-              />
+            />
           </Box>
         )}
         <div ref={messagesEndRef} />
@@ -246,6 +252,25 @@ export default function App() {
         drawerwidth={drawerwidth}
         isLoading={isLoading}
       />
+      <Box 
+        sx={{ 
+          position: 'fixed', 
+          bottom: 0, 
+          left: 0, 
+          right: 0, 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center',
+          padding: '8px',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <InfoIcon sx={{ fontSize: 16, mr: 1, color: 'grey' }} />
+          <Typography variant="caption" color="grey">
+            ChatTCM can make mistakes. Check important info.
+          </Typography>
+        </Box>
+      </Box>
     </Box>
   );
 }

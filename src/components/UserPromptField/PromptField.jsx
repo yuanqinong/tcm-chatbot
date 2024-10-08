@@ -8,7 +8,7 @@ import SendIcon from "@mui/icons-material/Send";
 const StyledPaper = styled(Paper)(({ theme, open, drawerwidth }) => ({
   display: "flex",
   position: "fixed",
-  bottom: 10,
+  bottom: 30,
   left: 20,
   width: "calc(98% - 40px)", // Subtract left and right padding
   alignItems: "center",
