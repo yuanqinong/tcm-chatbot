@@ -26,7 +26,7 @@ import SmartToyIcon from "@mui/icons-material/SmartToy";
 import Avatar from "@mui/material/Avatar";
 import InfoIcon from "@mui/icons-material/Info";
 import { sendMessage } from "./Redux/chatbot.jsx";
-import "./App.css";
+import Alert from "./components/AlertComponent/alert.jsx";
 
 const drawerwidth = 240;
 
@@ -90,7 +90,16 @@ export default function App() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [alert, setAlert] = useState(null);
   const messagesEndRef = useRef(null);
+
+  const showAlert = (message, severity) => {
+    setAlert({ message, severity});
+  };
+
+  const closeAlert = () => {
+    setAlert(null);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -112,12 +121,16 @@ export default function App() {
     console.log("handling send message");
     setMessages((prev) => [...prev, { text: message, isai: false }]);
     setIsLoading(true);
-    const response = await sendMessage(message);
-    // Simulate AI response (replace with actual API call)
-    if (response) {
-      setMessages((prev) => [...prev, { text: response.answer, isai: true }]);
+    try {
+      const response = await sendMessage(message);
+      if (response) {
+      setMessages((prev) => [...prev, { text: response.output, isai: true }]);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      showAlert(`Something went wrong. Please try again.`, "error");
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -271,6 +284,15 @@ export default function App() {
           </Typography>
         </Box>
       </Box>
+      {alert && (
+      <div className="alert-container">
+        <Alert
+          message={alert.message}
+          severity={alert.severity}
+          onClose={() => {closeAlert()}}
+        />
+        </div>
+      )}
     </Box>
   );
 }
