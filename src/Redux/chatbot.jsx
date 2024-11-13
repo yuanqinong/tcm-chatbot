@@ -8,9 +8,9 @@ const api = axios.create({
   }
 });
 
-export const sendMessage = async (message) => {
+export const sendMessage = async (message, session_id="testing") => {
     try {
-        const response = await api.post('api/chatbot/chat', { "query": message });;
+        const response = await api.post(`api/chatbot/chat?session_id=${session_id}`, { "query": message });
         return response.data;
     } catch (error) {
         console.error('Error sending message:', error);
