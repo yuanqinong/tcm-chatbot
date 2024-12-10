@@ -118,7 +118,6 @@ export default function App() {
   };
 
   const handleSendMessage = async (message) => {
-    console.log("handling send message");
     setMessages((prev) => [...prev, { text: message, isai: false }]);
     setIsLoading(true);
     try {
@@ -132,10 +131,6 @@ export default function App() {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    console.log(messages);
-  }, [messages]);
 
   return (
     <Box sx={{ display: "flex" }}>
